@@ -7,6 +7,10 @@ namespace ss.Models
 {
     public class Student
     {
+        //public Student()
+        //{
+        //    this.Department = new Department();
+        //}
         public int StudentId { get; set; }
         public string StudentName { get; set; }
 
@@ -18,12 +22,9 @@ namespace ss.Models
 
         public string Address { get; set; }
 
-        public int DepartmentId { get; set; }
+        public Department DepartmentId { get; set; }
 
-        public string DepartmentName { get; set; }
+        public Course CourseId { get; set; }
 
-        public int CourseId { get; set; }
-
-        public string CourseName { get; set; }
     }
 }

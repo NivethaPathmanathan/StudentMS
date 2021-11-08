@@ -18,7 +18,7 @@ namespace ss.Controllers
             this.courseManager = new CourseManager();
         }
         [HttpGet]
-        [Route("{id}")]
+        //[Route("{id}")]
         public List<Course> GetSingleCourse(int CourseId)
         {
             List<Course> courseList = new List<Course>();
@@ -39,5 +39,29 @@ namespace ss.Controllers
 
         }
 
+        [HttpPost]
+        //[Route("course")]
+        public string InsertCourse(Course course)
+        {
+            var course1 = courseManager.InsertCourse(course);
+            return course1;
+
+        }
+
+        [HttpPut]
+        //[Route("{id}/update-course")]
+        public string UpdateCourses(int id, Course course, Department department)
+        {
+            var course1 = courseManager.UpdateCourses(id, course, department);
+            return course1;
+        }
+
+        [HttpDelete]
+        //[Route("{id}/delete-course")]
+        public string DeleteCourse(int id)
+        {
+            var course1 = courseManager.DeleteCourse(id);
+            return course1;
+        }
     }
 }

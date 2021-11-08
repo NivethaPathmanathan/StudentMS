@@ -19,5 +19,10 @@ namespace ss
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected void Application_BeginRequest()
+        {
+            HttpContext.Current.Response.AddHeader("Access-Control-Allow-Origin", "*");
+        }
     }
 }

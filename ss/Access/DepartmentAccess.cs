@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Newtonsoft.Json;
 using ss.Models;
 using System;
 using System.Collections.Generic;
@@ -27,12 +28,46 @@ namespace ss.Access
             List<Department> AllDepartmentsDetails = new List<Department>();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                connection.Open();
-                AllDepartmentsDetails = connection.Query<Department>("SELECT * FROM Department INNER JOIN Student ON Student.DepartmentId = Department.DepartmentID").ToList();
-                connection.Close();
+               
+                AllDepartmentsDetails = connection.Query<Department>("SELECT * FROM Department").ToList();
             }
 
             return AllDepartmentsDetails;
+        }
+        public string InsertDepartment(Department department)
+        {
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var departments = connection.Execute("Insert into Department (DepartmentName) values (@DepartmentName)", new { DepartmentName = department.DepartmentName });
+
+                var Departments = JsonConvert.SerializeObject(departments);
+                return Departments;
+            }
+        }
+
+        public string UpdateDepartments(int DepartmentId, Department department)
+        {
+            string query = "UPDATE Department set DepartmentName = '" + department.DepartmentName + "' WHERE DepartmentId = " + DepartmentId;
+
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var departments = connection.Execute(query);
+
+                var Departments = JsonConvert.SerializeObject(departments);
+                return Departments;
+            }
+        }
+
+        public string DeleteDepartment(int DepartmentId)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var departments = connection.Execute("Delete FROM Department Where DepartmentId = @DepartmentId", new { DepartmentId = DepartmentId });
+
+                var Departments = JsonConvert.SerializeObject(departments);
+                return Departments;
+            }
         }
     }
 }

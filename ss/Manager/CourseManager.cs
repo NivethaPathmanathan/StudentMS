@@ -26,5 +26,20 @@ namespace ss.Manager
             return courseAccess.GetAllCourses();
 
         }
+
+        public string InsertCourse(Course course)
+        {
+            return courseAccess.InsertCourse(course);
+
+        }
+        public string UpdateCourses(int CourseId, Course course, Department department)
+        {
+            return courseAccess.UpdateCourses(CourseId,course, department);
+        }
+
+        public string DeleteCourse(int CourseId)
+        {
+            return courseAccess.DeleteCourse(CourseId);
+        }
     }
 }

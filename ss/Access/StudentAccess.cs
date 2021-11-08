@@ -12,16 +12,18 @@ namespace ss.Access
 {
     public class StudentAccess
     {
-        // string ConnectionString = ConfigurationManager.ConnectionStrings["STMconnectionString"].ConnectionString;
         string ConnectionString = @"Data Source=laptop-q6s7b3ka;Initial Catalog = StudentManagementSystem; Integrated Security = True";
         
-        //string ConnectionString = @"Data Source=LAPTOP-Q6S7B3KA;Initial Catalog=StudentManagementSystem;User ID=;Password=";
         public List<Student> GetSingleStudent(int StudentId)
         {
+            string query = "SELECT StudentId, StudentName, ContactNo, DOB, Gender, Address, d.DepartmentName, c.CourseName " +
+                "FROM Student s LEFT JOIN Department d ON d.DepartmentId = s.DepartmentId " +
+                "LEFT JOIN Course c ON c.CourseId = s.CourseId Where Id = " + StudentId;
+
             List<Student> studentDetails = new List<Student>();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                studentDetails = connection.Query<Student>("SELECT StudentId, StudentName, ContactNo, DOB, Gender, Address, DepartmentName, CourseName FROM Student LEFT JOIN Department ON Department.DepartmentId = Student.DepartmentId LEFT JOIN Course ON Course.CourseId = Student.CourseId Where Id = " + StudentId).ToList();
+                studentDetails = connection.Query<Student>(query).ToList();
             }
 
             return studentDetails;
@@ -29,16 +31,22 @@ namespace ss.Access
 
         public List<Student> GetAllStudents()
         {
-            string query = "SELECT s.* FROM Student s LEFT JOIN Department d ON d.DepartmentId = s.DepartmentId LEFT JOIN Course c ON c.CourseId = s.CourseId";
+            string query = "Select * FROM Student";
             List<Student> studentAllDetails = new List<Student>();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                
-                var result = connection.Query<Student>(query).ToList();
+
+                var result = connection.Query<Student, Department>(query, (student, department)=>
+                {
+                    student.Department = department;
+                    return student;
+                },
+                splitOn: "StudentId")
+                    .Distinct()
+                .ToList();
                 studentAllDetails = result;
-                
+
             }
-            
             return studentAllDetails;
         }
         public string InsertStudent(Student student)
@@ -46,30 +54,37 @@ namespace ss.Access
           
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var students = connection.Execute("Insert into Student (StudentName, ContactNo, DOB, Gender, Address, DepartmentId, DepartmentName, CourseId, CourseName) values (@StudentName, @ContactNo, @DOB, @Gender, @Address, @DepartmentId, @DepartmentName, @CourseId, @CourseName)", new { StudentName = student.StudentName, ContactNo = student.ContactNo, DOB = student.DOB, Gender = student.Gender, Address = student.Address, DepartmentId = student.DepartmentId, DepartmentName = student.DepartmentName, CourseId = student.CourseId, CourseName = student.CourseName });
+                var students = connection.Execute("Insert into Student (StudentName, ContactNo, DOB, Gender, Address, DepartmentId, DepartmentName, CourseId, CourseName) values (@StudentName, @ContactNo, @DOB, @Gender, @Address, @DepartmentId, @DepartmentName, @CourseId, @CourseName)", new { StudentName = student.StudentName, ContactNo = student.ContactNo, DOB = student.DOB, Gender = student.Gender, Address = student.Address, DepartmentId = student.DepartmentId, CourseId = student.CourseId });
 
                 var Students = JsonConvert.SerializeObject(students);
                 return Students;
             }
         }
 
-        public string UpdateStudents(Student student)
+        public string UpdateStudents(int StudentId, Student student, Department department, Course course)
         {
+            string query = "UPDATE Student" +
+                " set StudentName = '" + student.StudentName + "',ContactNo = '" + student.ContactNo + "'," +
+                " DOB = '" + student.DOB + "', Gender = '" + student.Gender + "', " +
+                "Address = '" + student.Address + "', DepartmentName = '" + department.DepartmentName + "'," +
+                " CourseName = '" + course.CourseName + "' " +
+                "WHERE StudentId = " + StudentId;
+
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var students = connection.Execute("UPDATE Student set StudentName='" + student.StudentName + "',ContactNo='" + student.ContactNo + "', DOB='" + student.DOB + "', Gender='" + student.Gender + "', Address='" + student.Address + "', DepartmentName='" + student.DepartmentName + "', CourseName='" + student.CourseName + "' WHERE Id=" + student.StudentId);
+                var students = connection.Execute(query);
 
                 var Students = JsonConvert.SerializeObject(students);
                 return Students;
             }
         }
 
-        public string DeleteStudent(Student student)
+        public string DeleteStudent(int StudentId)
         {
             //Student student = new Student();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var students = connection.Execute("Delete FROM Student Where Id = @StudentId", new { Id = student.StudentId });
+                var students = connection.Execute("Delete FROM Student Where StudentId = @StudentId", new { StudentId = StudentId });
 
                 var Students = JsonConvert.SerializeObject(students);
                 return Students;

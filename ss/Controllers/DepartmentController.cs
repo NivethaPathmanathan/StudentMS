@@ -19,7 +19,7 @@ namespace ss.Controllers
             this.departmentManager = new DepartmentManager();
         }
         [HttpGet]
-        [Route("{id}")]
+        //[Route("{id}")]
         public List<Department> GetSingleDepartment(int DepartmentId)
         {
             List<Department> departmentList = new List<Department>();
@@ -38,6 +38,31 @@ namespace ss.Controllers
             var DepartmentList = JsonConvert.SerializeObject(departmentList);
             return DepartmentList;
 
+        }
+
+        [HttpPost]
+        //[Route("department")]
+        public string InsertDepartment(Department department)
+        {
+            var department1 = departmentManager.InsertDepartment(department);
+            return department1;
+
+        }
+
+        [HttpPut]
+        //[Route("{id}/update-department")]
+        public string UpdateDepartments(int id, Department department)
+        {
+            var department1 = departmentManager.UpdateDepartments(id, department);
+            return department1;
+        }
+
+        [HttpDelete]
+        //[Route("{id}/delete-department")]
+        public string DeleteDepartment(int id)
+        {
+            var department1 = departmentManager.DeleteDepartment(id);
+            return department1;
         }
 
     }

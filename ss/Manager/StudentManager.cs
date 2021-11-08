@@ -33,14 +33,14 @@ namespace ss.Manager
             return studentAccess.InsertStudent(student);
 
         }
-        public string UpdateStudents(Student student)
+        public string UpdateStudents(int StudentId, Student student, Department department, Course course)
         {
-            return studentAccess.UpdateStudents(student);
+            return studentAccess.UpdateStudents(StudentId, student, department, course);
         }
 
-        public string DeleteStudent(Student student)
+        public string DeleteStudent(int StudentId)
         {
-            return studentAccess.DeleteStudent(student);
+            return studentAccess.DeleteStudent(StudentId);
         }
     }
 }

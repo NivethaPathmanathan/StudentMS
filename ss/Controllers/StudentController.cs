@@ -10,6 +10,7 @@ using System.Web.Mvc;
 namespace ss.Controllers
 {
     //[RoutePrefix("api/student")]
+    //[Route("/api/student")]
     public class StudentController : Controller
     {
             private readonly StudentManager studentManager;
@@ -29,7 +30,8 @@ namespace ss.Controllers
             }
 
             [HttpGet]
-            //[Route("get-all-students")]
+        //[Route("get-all-students")]
+           //[Route("/get-all-students")]
             public string GetAllStudents()
             {
                //List<Student> studentList = new List<Student>();
@@ -42,7 +44,7 @@ namespace ss.Controllers
 
 
             [HttpPost]
-            [Route("student")]
+           // [Route("student")]
             public string InsertStudent(Student student)
             {
                 var student1 = studentManager.InsertStudent(student);
@@ -52,17 +54,17 @@ namespace ss.Controllers
 
             [HttpPut]
             //[Route("{id}/update-student")]
-            public string UpdateStudents(Student student)
+            public string UpdateStudents(int id, Student student, Department department, Course course)
             {
-                var student1 = studentManager.UpdateStudents(student);
+                var student1 = studentManager.UpdateStudents(id, student, department, course);
                 return student1;
             }
 
             [HttpDelete]
             //[Route("{id}/delete-student")]
-            public string DeleteStudent(Student student)
+            public string DeleteStudent(int id)
             {
-                var student1 = studentManager.DeleteStudent(student);
+                var student1 = studentManager.DeleteStudent(id);
                 return student1;
             }
     }
