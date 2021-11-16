@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
+using Dapper;
 
 namespace ss.Models
 {
@@ -22,9 +24,21 @@ namespace ss.Models
 
         public string Address { get; set; }
 
-        public Department DepartmentId { get; set; }
+        [IgnoreInsert]
+        [Column("DepartmentId")]
+        public Department Department { get; set; }
 
-        public Course CourseId { get; set; }
+        [IgnoreSelect]
+        [IgnoreDataMember]
+        public int DepartmentId { get; set; }
+
+        [IgnoreInsert]
+        [Column("CourseId")]
+        public Course Course { get; set; }
+
+        [IgnoreSelect]
+        [IgnoreDataMember]
+        public int CourseId { get; set; }
 
     }
 }

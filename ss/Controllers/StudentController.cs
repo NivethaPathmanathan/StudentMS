@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Cors;
 using System.Web.Mvc;
 
 namespace ss.Controllers
 {
     //[RoutePrefix("api/student")]
     //[Route("/api/student")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*", exposedHeaders: "X-My-Header")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class StudentController : Controller
     {
             private readonly StudentManager studentManager;
@@ -30,8 +33,8 @@ namespace ss.Controllers
             }
 
             [HttpGet]
-        //[Route("get-all-students")]
-           //[Route("/get-all-students")]
+            //[Route("get-all-students")]
+            //[Route("/get-all-students")]
             public string GetAllStudents()
             {
                //List<Student> studentList = new List<Student>();
@@ -42,9 +45,9 @@ namespace ss.Controllers
 
             }
 
-
+           // [DisableCors()]
             [HttpPost]
-           // [Route("student")]
+            // [Route("student")]
             public string InsertStudent(Student student)
             {
                 var student1 = studentManager.InsertStudent(student);

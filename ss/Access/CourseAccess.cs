@@ -28,9 +28,23 @@ namespace ss.Access
         {
             string query = "SELECT * FROM Course";
             List<Course> AllCoursesDetails = new List<Course>();
+            //using (SqlConnection connection = new SqlConnection(ConnectionString))
+            //{
+            //    AllCoursesDetails = connection.Query<Course>(query).ToList();
+            //}
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                AllCoursesDetails = connection.Query<Course>(query).ToList();
+
+                var result = connection.Query<Course, Department, Course>(query, (course, department) =>
+                {
+                    course.Department = department;
+                    return course;
+                },
+                splitOn: "DepartmentId")
+                    .Distinct()
+                .ToList();
+                AllCoursesDetails = result;
+
             }
 
             return AllCoursesDetails;
@@ -41,7 +55,7 @@ namespace ss.Access
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var courses = connection.Execute("Insert into Course (CourseName, Duration, DepartmentId, DepartmentName) values (@CourseName, @Duration, @DepartmentId, @DepartmentName)", new { CourseName = course.CourseName, Duration = course.Duration, DepartmentId = course.DepartmentId });
+                var courses = connection.Execute("Insert into Course (CourseName, Duration, DepartmentId, DepartmentName) values (@CourseName, @Duration, @DepartmentId, @DepartmentName)", new { CourseName = course.CourseName, Duration = course.Duration, DepartmentId = course.Department });
 
                 var Courses = JsonConvert.SerializeObject(courses);
                 return Courses;

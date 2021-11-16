@@ -13,8 +13,12 @@ namespace ss
             // Web API configuration and services
             // config.EnableCors();
             // Web API routes
+
             var corsAttr = new EnableCorsAttribute("*", "*", "*");
             config.EnableCors(corsAttr);
+
+            //var corsAttr = new EnableCorsAttribute("http://localhost:4200", "*", "*");
+            //config.EnableCors(corsAttr);
 
             config.MapHttpAttributeRoutes();
 

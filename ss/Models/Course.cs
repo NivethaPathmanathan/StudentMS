@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Web;
 
 namespace ss.Models
@@ -10,7 +13,17 @@ namespace ss.Models
         public int CourseId { get; set; }
         public string CourseName { get; set; }
         public int Duration { get; set; }
-        public Department DepartmentId { get; set; }
-        
+       
+        //[Column("DepartmentId")]
+        //public Department Department { get; set; }
+
+        [IgnoreInsert]
+        [Dapper.Column("DepartmentId")]
+        public Department Department { get; set; }
+
+        [IgnoreSelect]
+        [IgnoreDataMember]
+        public int DepartmentId { get; set; }
+
     }
 }

@@ -31,19 +31,21 @@ namespace ss.Access
 
         public List<Student> GetAllStudents()
         {
-            string query = "Select * FROM Student";
+            string query = "Select * FROM Student INNER JOIN Department ON Student.DepartmentId = Department.DepartmentId INNER JOIN Course ON Student.CourseId = Course.CourseId";
             List<Student> studentAllDetails = new List<Student>();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
 
-                var result = connection.Query<Student, Department>(query, (student, department)=>
+                var result = connection.Query<Student, Department, Course, Student>(query, (student, department, course)=>
                 {
                     student.Department = department;
+                    student.Course = course;
                     return student;
                 },
-                splitOn: "StudentId")
+                splitOn: "CourseId, DepartmentId, CourseId")
                     .Distinct()
                 .ToList();
+
                 studentAllDetails = result;
 
             }
@@ -54,7 +56,7 @@ namespace ss.Access
           
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var students = connection.Execute("Insert into Student (StudentName, ContactNo, DOB, Gender, Address, DepartmentId, DepartmentName, CourseId, CourseName) values (@StudentName, @ContactNo, @DOB, @Gender, @Address, @DepartmentId, @DepartmentName, @CourseId, @CourseName)", new { StudentName = student.StudentName, ContactNo = student.ContactNo, DOB = student.DOB, Gender = student.Gender, Address = student.Address, DepartmentId = student.DepartmentId, CourseId = student.CourseId });
+                var students = connection.Execute("Insert into Student (StudentName, ContactNo, DOB, Gender, Address, DepartmentId, CourseId) values (@StudentName, @ContactNo, @DOB, @Gender, @Address, @DepartmentId, @CourseId)", new { StudentName = student.StudentName, ContactNo = student.ContactNo, DOB = student.DOB, Gender = student.Gender, Address = student.Address, DepartmentId = student.DepartmentId, CourseId = student.CourseId });
 
                 var Students = JsonConvert.SerializeObject(students);
                 return Students;
