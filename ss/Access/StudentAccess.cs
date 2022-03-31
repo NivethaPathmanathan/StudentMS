@@ -68,8 +68,7 @@ namespace ss.Access
             string query = "UPDATE Student" +
                 " set StudentName = '" + student.StudentName + "',ContactNo = '" + student.ContactNo + "'," +
                 " DOB = '" + student.DOB + "', Gender = '" + student.Gender + "', " +
-                "Address = '" + student.Address + "', DepartmentName = '" + department.DepartmentName + "'," +
-                " CourseName = '" + course.CourseName + "' " +
+                "Address = '" + student.Address + "' " +
                 "WHERE StudentId = " + StudentId;
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))

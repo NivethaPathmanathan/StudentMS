@@ -34,6 +34,12 @@ namespace ss
                 defaults: new { controller = "Course", action = "GetAllCourses" }
                 );
 
+            routes.MapRoute(
+                name: "GetAllModules",
+                url: "{controller}/{action}",
+                defaults: new { controller = "Module", action = "GetAllModules" }
+                );
+
             //InsertDepartment
             //InsertCourse
             //InsertStudent
@@ -54,6 +60,12 @@ namespace ss
                 url: "{controller}/{action}",
                 defaults: new { controller = "Course", action = "InsertCourse" }
             );
+
+            routes.MapRoute(
+              name: "InsertModule",
+              url: "{controller}/{action}",
+              defaults: new { controller = "Module", action = "InsertModule" }
+          );
 
 
             //DeleteStudent
@@ -77,6 +89,12 @@ namespace ss
               defaults: new { controller = "Department", action = "DeleteDepartment", Id = "" }
           );
 
+              routes.MapRoute(
+              name: "DeleteModule",
+              url: "{controller}/{action}/{Id}",
+              defaults: new { controller = "Module", action = "DeleteModule", Id = "" }
+          );
+
             //UpdateCourses
             //UpdateStudents
             //UpdateDepartments
@@ -97,6 +115,12 @@ namespace ss
                url: "{controller}/{action}/{Id}",
                defaults: new { controller = "Department", action = "UpdateDepartments", Id = "" }
            );
+
+            routes.MapRoute(
+              name: "UpdateModules",
+              url: "{controller}/{action}/{Id}",
+              defaults: new { controller = "Module", action = "UpdateModules", Id = "" }
+          );
         }
     }
 }

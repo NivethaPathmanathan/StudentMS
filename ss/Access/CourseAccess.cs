@@ -26,12 +26,8 @@ namespace ss.Access
 
         public List<Course> GetAllCourses()
         {
-            string query = "SELECT * FROM Course";
+            string query = "Select * FROM Course INNER JOIN Department ON Course.DepartmentId = Department.DepartmentId";
             List<Course> AllCoursesDetails = new List<Course>();
-            //using (SqlConnection connection = new SqlConnection(ConnectionString))
-            //{
-            //    AllCoursesDetails = connection.Query<Course>(query).ToList();
-            //}
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
 
@@ -47,7 +43,7 @@ namespace ss.Access
 
             }
 
-            return AllCoursesDetails;
+                return AllCoursesDetails;
         }
 
         public string InsertCourse(Course course)
@@ -64,7 +60,7 @@ namespace ss.Access
 
         public string UpdateCourses(int CourseId, Course course, Department department)
         {
-            string query = "UPDATE Course set CourseName = '" + course.CourseName + "', Duration = '" + course.Duration + "', DepartmentName = '" + department.DepartmentName + "' WHERE CourseId = " + CourseId;
+            string query = "UPDATE Course set CourseName = '" + course.CourseName + "', Duration = '" + course.Duration + "' WHERE CourseId = " + CourseId;
 
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
